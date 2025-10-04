@@ -6,26 +6,118 @@ reviewers:
 - jpbetz
 - thockin
 content_type: concept
+
 weight: 20
 ---
 
 {{< feature-state for_k8s_version="v1.33" state="beta" >}}
 
+
+
+
 Kubernetes {{< skew currentVersion >}} includes optional _declarative validation_ for APIs. When enabled, the Kubernetes API server can use this mechanism rather than the legacy approach that relies on hand-written Go
+
+
+
+
+
+
 code (`validation.go` files) to ensure that requests against the API are valid.
 Kubernetes developers, and people [extending the Kubernetes API](/docs/concepts/extend-kubernetes/api-extension/apiserver-aggregation/),
-can define validation rules directly alongside the API type definitions (`types.go` files). Code authors define
-pecial comment tags (e.g., `+k8s:minimum=0`). A code generator (`validation-gen`) then uses these tags to produce
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+can define validation rules directly alongside the API type definitions (`type
+
+
+
+s.go` files). Code authors define
+
+special comment tags (e.g., `+k8s:minimum=0`). A code generator (`validation-gen`) then uses these tags to produce
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 optimized Go code for API validation.
 
 While primarily a feature impacting Kubernetes contributors and potentially developers of [extension API servers](/docs/concepts/extend-kubernetes/api-extension/apiserver-aggregation/), cluster administrators should understand its behavior, especially during its rollout phases.
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Declarative validation is being rolled out gradually.
 In Kubernetes {{< skew currentVersion >}}, the APIs that use declarative validation include:
 
+
+
+
+
+
+
+
 * [ReplicationController](/docs/concepts/workloads/controllers/replicationcontroller/)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 {{< note >}}
 For the beta of this feature, Kubernetes is intentionally using a superseded API as a test bed for the change.
@@ -34,11 +126,22 @@ Future Kubernetes releases may roll this out to more APIs.
 
 
 *   `DeclarativeValidation`: (Beta, Default: `true`) When enabled, the API server runs *both* the new declarative validation and the old hand-written validation for migrated types/fields. The results are compared internally.
+
+
+
+
 *   `DeclarativeValidationTakeover`: (Beta, Default: `false`) This gate determines which validation result is *authoritative* (i.e., returned to the user and used for admission decisions).
+
+
+
+
 
 **Default Behavior (Kubernetes {{< skew currentVersion >}}):**
 
+
 *   With `DeclarativeValidation=true` and `DeclarativeValidationTakeover=false` (the default values for the gates), both validation systems run.
+
+
 *   **The results of the *hand-written* validation are used.** The declarative validation runs in a mismatch mode for comparison.
 *   Mismatches between the two validation systems are logged by the API server and increment the `declarative_validation_mismatch_total` metric. This helps developers identify and fix discrepancies during the Beta phase.
 *   **Cluster upgrades should be safe** regarding this feature, as the authoritative validation logic doesn't change by default.
@@ -728,3 +831,49 @@ type M2 struct{}
 ```
 
 In this example, at most one of `A` or `B` can be set. It is also valid for neither to be set.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
